@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="origin">
+  <title>Вход по номеру телефона — dom.ru</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text: #2d3436;
+      --muted: #8492a6;
+      --accent: #e83a3a;
+      --accent-hover: #c83535;
+      --border: #dfe6e9;
+    }
+    * { box-sizing: borderbox; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: var(--bg); color: var(--text); line-height: 1.6; }
+    
+    .auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .auth-card {
+      background: var(--card);
+      width: 100%;
+      max-width: 360px;
+      padding: 40px 32px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    .auth-card h2 {
+      margin-bottom: 24px;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .auth-card p {
+      margin-bottom: 24px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .input-group { margin-bottom: 20px; text-align: left; }
+    .input-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+    .input-group input {
+      width: 100%;
+      margin: 0 auto;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      color: var(--muted);
+      background: #fff;
+      transition: border-color 0.2s;
+      line-height: 1.5;
+      box-sizing: border-box;
+    }
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(232, 58, 58, 0.15);
+    }
+    .btn {
+      width: 100%;
+      padding: 10px 20px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: var(--accent-hover); }
+    .btn:focus { outline: 2px solid var(--accent-hover); outline-offset: 2px; }
+    .close {
+      float: right;
+      font-size: 20px;
+      color: var(--muted);
+      cursor: pointer;
+      line-height: 1;
+    }
+    .close:hover { color: var(--text); }
+    
+    /* Links */
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+    }
+    .back-link:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-card">
+      <h2>Вход по номеру телефона</h2>
+      
+      <p>Введите номер телефона, чтобы получить доступ к гостевым точкам</p>
+      <form id="phoneForm">
+        <div class="input-group">
+          <label for="phoneInput">Номер телефона</label>
+          <input type="tel" id="phoneInput" placeholder="+7 999 000 00 00" required>
+        </div>
+        <button type="submit" class="btn">Отправить код</button>
+      </form>
+      <a class="back-link" href="/">← На карту</a>
+    </div>
+  </div>
+
+  <script>
+    // Cookie helpers
+    function setCookie(name, value, days) {
+      const date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      document.cookie = `${name}=${encodeURIComponent(value)};expires=${date.toUTCString()};path=/`;
+    }
+    function getCookie(name) {
+      const match = document.cookie.match(`(^|;)\\s*${name}\\s*=`);
+      return match ? match[0].split('=')[1].trim() : null;
+    }
+
+    // Form handler
+    document.getElementById('phoneForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const phone = document.getElementById('phoneInput').value.trim();
+      if (!phone) return alert('Введите номер телефона');
+      
+      // Save phone and redirect to confirmation
+      setCookie('entered_phone', phone, 30);
+      window.location.href = '/confirm.html';
+    });
+  </script>
+</body>
+</html>

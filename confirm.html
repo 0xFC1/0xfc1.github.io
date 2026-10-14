@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="origin">
+  <title>Код подтверждения — dom.ru</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text: #2d3436;
+      --muted: #8492a6;
+      --accent: #e83a3a;
+      --accent-hover: #c83535;
+      --border: #dfe6e9;
+    }
+    * { box-sizing: borderbox; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: var(--bg); color: var(--text); line-height: 1.6; }
+    
+    .confirm-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .confirm-card {
+      background: var(--card);
+      width: 100%;
+      max-width: 360px;
+      padding: 40px 32px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    .confirm-card h2 {
+      margin-bottom: 24px;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .confirm-card p {
+      margin-bottom: 24px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .confirm-form .input-group { margin-bottom: 20px; text-align: left; }
+    .confirm-form .input-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+    .confirm-form .input-group input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      color: var(--text);
+      background: #fff;
+      transition: border-color 0.2s;
+    }
+    .confirm-form .input-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(232, 58, 58, 0.15);
+    }
+    .confirm-form .btn {
+      width: 100%;
+      padding: 10px 20px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .confirm-form .btn:hover { background: var(--accent-hover); }
+    .confirm-form .btn:focus { outline: 2px solid var(--accent-hover); outline-offset: 2px; }
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+    }
+    .back-link:hover { color: var(--text); }
+    
+    /* Success state */
+    .success { padding: 40px 20px; text-align: center; }
+    .success i { font-size: 48px; color: var(--accent); margin-bottom: 16px; display: block; }
+    .success h3 { font-size: 20px; margin-bottom: 8px; color: var(--text); }
+    .success p { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="confirm-page">
+    <div class="confirm-card">
+      <h2>Введите код подтверждения</h2>
+     
+      <p>На номер <span id="phoneDisplay"></span> отправлен код подтверждения</p>
+      <form id="codeForm" class="confirm-form">
+        <div class="input-group">
+          <label for="codeInput">Код подтверждения</label>
+          <input type="text" id="codeInput" maxlength="6" placeholder="123456" required>
+        </div>
+        <button type="submit" class="btn">Верифицировать</button>
+      </form>
+      <a class="back-link" href="/">← На карту</a>
+    </div>
+  </div>
+
+  <script>
+    // Parse phone from URL or cookie
+    function getPhone() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('phone') || getCookie('entered_phone') || '';
+    }
+
+    // Cookie helpers
+    function setCookie(name, value, days) {
+      const date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      document.cookie = `${name}=${encodeURIComponent(value)};expires=${date.toUTCString()};path=/`;
+    }
+     function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+}
+
+
+    // Display phone
+    const phoneDisplay = document.getElementById('phoneDisplay');
+    const phone = getPhone();
+    console.log("PHONE:");
+    console.log(phone);
+    if (phone) {
+      phoneDisplay.textContent = phone;
+    }
+
+    // Form handler
+    document.getElementById('codeForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const code = document.getElementById('codeInput').value.trim();
+      if (code.length !== 6) return alert('Введите 6-значный код');
+      
+      // Simulate successful verification
+      setCookie('user_phone', phone, 30);
+      alert('Вы успешно авторизованы!');
+      window.location.href = '/';
+    });
+  </script>
+</body>
+</html>
