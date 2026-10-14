@@ -244,7 +244,7 @@
   <div class="header">
     <h1>Гостевые точки</h1>
     <div class="nav">
-      <a class="nav-link" href="/login.html" id="authBtn">Войти как гость</a>
+      <a class="nav-link" href="/login" id="authBtn">Войти как гость</a>
     </div>
   </div>
   <div class="filter-panel">
@@ -278,7 +278,7 @@
           if(!streetfilter || floor < 3) {
             const marker = L.marker([lat, lng]).addTo(markerGroup);
           const isLoggedIn = getCookie('user_phone') ? true : false;
-          const passwordHtml = isLoggedIn ? password : '<a href="/login.html">[Авторизуйтесь для просмотра]</a>';
+          const passwordHtml = isLoggedIn ? password : '<a href="/login">[Авторизуйтесь для просмотра]</a>';
           marker.bindPopup('<b>' + address + '</b><br>Этаж: ' + floor + '<br>SSID: ' + ssid + '<br>Пароль: ' + passwordHtml, { closeButton: true, autoClose: false }).on('click', e => marker.openPopup());
           
         }          
@@ -349,7 +349,7 @@
           <h3>Статистика</h3>
           <p>Загрузка: <span id="used">1.8</span> гб</p>
           <p>Осталось: <span id="remaining">0.2</span> гб</p>
-          <a href='/register.html'>Подключите домашний интернет dom.ru</a>, чтобы увеличить лимиты
+          <a href='/register'>Подключите домашний интернет dom.ru</a>, чтобы увеличить лимиты
           <button class="btn">Закрыть</button>
         </div>
       `;
