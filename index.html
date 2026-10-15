@@ -275,7 +275,7 @@
       .then(response => response.json())
       .then(config => {
         config.forEach(([address, lng, lat, floor, ssid, password]) => {
-          if(!streetfilter || floor < 3) {
+          if(!streetfilter || floor < 4) {
             const marker = L.marker([lat, lng]).addTo(markerGroup);
           const isLoggedIn = getCookie('user_phone') ? true : false;
           const passwordHtml = isLoggedIn ? password : '<a href="/login">[Авторизуйтесь для просмотра]</a>';
