@@ -18,13 +18,65 @@
     }
     * { box-sizing: borderbox; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background: var(--bg); color: var(--text); line-height: 1.6; }
+    
+    /* Demo banner */
+    .demo-banner {
+      
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      right: 0px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      background: #ffeb3b;
+      
+    }
+    .demo-banner:hover {
+      cursor: pointer;
+    }
+    
+    /* Popup panel */
+    .popup-panel {
+      position: fixed;
+      top: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--card);
+      padding: 20px 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      width: 300px;
+      z-index: 1001;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .popup-panel h3 {
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: var(--accent);
+      text-align: center;
+    }
+    .popup-panel input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+    .popup-panel .btn {
+      width: 100%;
+      padding: 8px 16px;
+      font-size: 14px;
+    }
     #map { width: 100%; height: 100vh; }
     html, body { height: 100%; overflow: hidden; }
     
 /* Header */
     .header {
       position: absolute;
-      top: 20px;
+      top: 40px;
       left: 20px;
       right: 20px;
       display: flex;
@@ -270,9 +322,11 @@
   </style>
 </head>
 <body>
-  <div id="map"></div>
   
+  <div id="map"></div>
+  <div class="demo-banner" onclick="showDemoDisclaimer()"><u>демонстрационная версия</u></div>
   <div class="header">
+    
     <h1>Гостевые точки</h1>
     <div class="nav">
       <a class="nav-link" href="/login" id="authBtn">Войти как гость</a>
@@ -335,7 +389,10 @@
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
 }
+
 var popup;
+
+
 
 function logoutUser(){
   document.cookie = "user_phone" + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
@@ -345,7 +402,31 @@ function logoutUser(){
 
 }
 
+function showDemoDisclaimer(){
+  const p = document.querySelector('.popup-panel');
+    if(p) return;
+  const popup = document.createElement('div');
+  popup.className = 'popup-panel';
+  popup.innerHTML = `
+    <h3>Демо версия</h3>
+    <p>Сайт предназначен лишь для отображения концепции. Бэкенд отсутствует, используются демонстрационные данные. При аутентентификации не происходит проверки введенного кода подтверждения.</p>
+    <br>
+    <i>Для повторного отображения этого окна нажмите на баннер сверху.</i>
+    <button class="btn">Закрыть</button>
+  `;
+  document.body.appendChild(popup);
+  
+  const closeBtn = popup.querySelector('button');
+  closeBtn.addEventListener('click', function() {
+    document.body.removeChild(popup);
+  });
 
+}
+
+if(!getCookie("first-run")){
+  showDemoDisclaimer();
+  setCookie("first-run", '-')
+}
 //    function getCookie(name) {
   //    const match = document.cookie.match(`(^|;)\\s*${name}\\s*=`);
     //  console.log(match);
